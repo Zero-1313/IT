@@ -1,0 +1,19 @@
+[linux]
+LIN1 ansible_host=10.0.10.11 hostname=lin1 webcolor=red
+LIN2 ansible_host=10.0.10.12 hostname=lin2 webcolor=blue
+
+[windows]
+WIN ansible_host=10.0.10.20 hostname=win01
+
+[linux:vars]
+ansible_user=root
+ansible_password=P@ssw0rd
+ansible_connection=ssh
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+[windows:vars]
+ansible_user=Administrator
+ansible_password=P@ssw0rd
+ansible_connection=winrm
+ansible_winrm_transport=basic
+ansible_winrm_server_cert_validation=ignore
