@@ -1,0 +1,28 @@
+- hosts: dns
+  become: yes
+  vars:
+    domain_name: linux.com
+    dns_ip: 10.0.10.11
+  tasks:
+    - apt: name=bind9 state=present update_cache=yes
+    - blockinfile:
+        path: /etc/bind/named.conf.local
+        block: |
+          zone "linux.com" {
+              type master;
+              file "/etc/bind/db.linux.com";
+          };
+    - copy:
+        dest: /etc/bind/db.linux.com
+        content: |
+          $TTL 604800
+          @ IN SOA ns.linux.com. root.linux.com. (
+              2 604800 86400 2419200 604800 )
+          @ IN NS ns.linux.com.
+          @ IN A 10.0.10.11
+          ns IN A 10.0.10.11
+          lin1 IN A 10.0.10.11
+          lin2 IN A 10.0.10.12
+    - service:
+        name: bind9
+        state: restarted
